@@ -1,0 +1,1 @@
+{    "name": "Дзынь",    "short_name": "VK Chat",    "start_url": "index.html",    "display": "standalone",    "background_color": "#ffffff",    "theme_color": "#4a76a8",    "icons": [        {            "src": "dzin.png",            "sizes": "192x192",            "type": "image/png"        }    ]}
