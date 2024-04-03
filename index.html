@@ -29,7 +29,61 @@
                 });
             });
         }
+        // Функция для вызова аутентификации с помощью Face ID
+        async function authenticateWithFaceID() {
+            try {
+                // Запрашиваем аутентификацию с помощью биометрии
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        // Указываем, что мы хотим использовать Face ID
+                        authenticatorSelection: {
+                            userVerification: 'required',
+                            authenticatorAttachment: 'platform'
+                        },
+                        // Дополнительные параметры, если необходимо
+                        // Например, ограничения по времени или дополнительные метаданные
+                    }
+                });
 
+                // Проверяем, успешно ли прошла аутентификация
+                if (credential) {
+                    // Аутентификация прошла успешно, выполните необходимые действия
+                    console.log('Face ID аутентификация прошла успешно');
+                } else {
+                    // Аутентификация не удалась, обработайте соответствующим образом
+                    console.error('Face ID аутентификация не удалась');
+                }
+            } catch (error) {
+                // Обрабатываем ошибки
+                console.error('Ошибка аутентификации с помощью Face ID:', error);
+            }
+        }
+
+        function checkVkSupport() {
+            // Проверяем тип устройства
+            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                // iOS - используем URI-схему для iOS
+                authenticateWithFaceID();
+            } else if (navigator.userAgent.match(/Android/i)) {
+                // Android - используем URI-схему для Android
+                window.location.href = "intent://vk.com/write-218837624#Intent;package=com.vkontakte.android;scheme=https;end";
+            } else {
+                // Другие устройства - переходим на веб-версию
+                window.location.href = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
+            }
+        }
+
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            checkVkSupport();
+        }
+
+        // Обработчик события visibilitychange
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true)) {
+                // Вызываем функцию проверки поддержки URI-схемы VK при разворачивании
+                checkVkSupport();
+            }
+        });
 
     </script>
 
