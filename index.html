@@ -3,39 +3,106 @@
 <head>
     <title>Дзынь</title>
 
-    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
+    <!-- Мета-теги для иконок и цветовой схемы -->
+    <link rel="apple-touch-icon" sizes="512x512" href="dzin.png">
+    
+    <!-- Мета-теги для Windows и цветовой схемы -->
+    <link rel="manifest" href="/dzin-ios/manifest.json">
+
+    <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-</head>
-<body>
-    <button id="redirectButton" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: red; border: none; border-radius: 10px; padding: 10px 20px; color: white; font-size: 18px;">Вперед!</button>
+    <meta name="theme-color" content="#000000">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <script>
-        // Получите ссылку, которую вы хотите открыть после нажатия кнопки
-        var vkUrl = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/Zinn/sw.js').then(function(registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
 
-        // Найдите кнопку по её id
-        var redirectButton = document.getElementById("redirectButton");
+        // Функция для вызова аутентификации с помощью Face ID
+        async function authenticateWithFaceID() {
+            try {
+                // Запрашиваем аутентификацию с помощью биометрии
+                const credential = await navigator.credentials.get({
+                    publicKey: {
+                        // Указываем, что мы хотим использовать Face ID
+                        authenticatorSelection: {
+                            userVerification: 'required',
+                            authenticatorAttachment: 'platform'
+                        },
+                        // Дополнительные параметры, если необходимо
+                        // Например, ограничения по времени или дополнительные метаданные
+                    }
+                });
 
-        // Добавьте обработчик события для нажатия кнопки
-        redirectButton.addEventListener("click", function() {
-            // Перенаправьте пользователя на страницу VK
-            window.location.href = vkUrl;
+                // Проверяем, успешно ли прошла аутентификация
+                if (credential) {
+                    // Аутентификация прошла успешно, выполните необходимые действия
+                    console.log('Face ID аутентификация прошла успешно');
+                } else {
+                    // Аутентификация не удалась, обработайте соответствующим образом
+                    console.error('Face ID аутентификация не удалась');
+                }
+            } catch (error) {
+                // Обрабатываем ошибки
+                console.error('Ошибка аутентификации с помощью Face ID:', error);
+            }
+        }
+
+        function checkVkSupport() {
+            // Проверяем тип устройства
+            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                // iOS - используем URI-схему для iOS
+                authenticateWithFaceID();
+            } else if (navigator.userAgent.match(/Android/i)) {
+                // Android - используем URI-схему для Android
+                window.location.href = "intent://vk.com/write-218837624#Intent;package=com.vkontakte.android;scheme=https;end";
+            } else {
+                // Другие устройства - переходим на веб-версию
+                window.location.href = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
+            }
+        }
+
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            checkVkSupport();
+        }
+
+        // Обработчик события visibilitychange
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true)) {
+                // Вызываем функцию проверки поддержки URI-схемы VK при разворачивании
+                checkVkSupport();
+            }
         });
     </script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
 </body>
 </html>
