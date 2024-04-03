@@ -1,7 +1,7 @@
 {
     "name": "Дзынь",
     "short_name": "Дзынь",
-    "start_url": "/dzin-ios/index.html",  
+    "start_url": "/zin/index.html",  
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#4a76a8",
