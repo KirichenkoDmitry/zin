@@ -1,0 +1,18 @@
+{
+    "name": "Дзынь",
+    "short_name": "Дзынь",
+    "start_url": "/dzin-ios/index.html",  
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#4a76a8",
+    "icons": [
+        {
+            "src": "dzin.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+
+
+
