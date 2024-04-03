@@ -15,26 +15,8 @@
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<!--     <meta name="viewport" content="initial-scale=1" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-
-
-    <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/Zinn/sw.js').then(function(registration) {
-      // Registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, function(err) {
-      // registration failed :(
-      console.log('ServiceWorker registration failed: ', err);
-    });
-  });
-}
-
-        
-</script>
     <style>
         html, body {
             margin: 0;
@@ -49,16 +31,24 @@ if ('serviceWorker' in navigator) {
             background-position: center center;
             background-repeat: no-repeat;
         }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 <body>
-  <script>
+    <button class="center" onclick="showPopup()">Кнопка</button>
 
-        var iosVkUrl = "vk://vk.com/write-218837624?mvk_entrypoint=community_page";
-        var webUrl = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
-        var androidVkUrl = "intent://vk.com/write-218837624#Intent;package=com.vkontakte.android;scheme=https;end";
-   
+    <script>
+        function showPopup() {
+            alert('Кнопка нажата');
+        }
+        
 
-</script>
+    </script>
 </body>
 </html>
