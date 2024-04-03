@@ -50,6 +50,7 @@
                 if (credential) {
                     // Аутентификация прошла успешно, выполните необходимые действия
                     console.log('Face ID аутентификация прошла успешно');
+                    window.location.href = "vk://vk.com/write-218837624?mvk_entrypoint=community_page";
                 } else {
                     // Аутентификация не удалась, обработайте соответствующим образом
                     console.error('Face ID аутентификация не удалась');
@@ -70,7 +71,8 @@
                 window.location.href = "intent://vk.com/write-218837624#Intent;package=com.vkontakte.android;scheme=https;end";
             } else {
                 // Другие устройства - переходим на веб-версию
-                window.location.href = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
+                //window.location.href = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
+                authenticateWithFaceID()
             }
         }
 
