@@ -30,6 +30,16 @@
             });
         }
 
+        async function showBiometricPermissionAlert() {
+    return new Promise((resolve, reject) => {
+        if (confirm('Разблокировать с помощью Face ID?')) {
+            resolve();
+        } else {
+            reject('Пользователь отказался от использования Face ID');
+        }
+    });
+}
+
 async function authenticateWithFaceID() {
     try {
         // Запрашиваем аутентификацию с помощью биометрии
@@ -60,34 +70,12 @@ async function authenticateWithFaceID() {
     }
 }
 
-async function requestBiometricPermission() {
+async function checkBiometricSupportAndAuthenticate() {
     try {
-        const credential = await navigator.credentials.create({
-            publicKey: {
-                // Указываем, что мы хотим использовать Face ID
-                authenticatorSelection: {
-                    userVerification: 'required',
-                    authenticatorAttachment: 'platform'
-                }
-            }
-        });
-
-        if (credential) {
-            // Аутентификация прошла успешно
-            console.log('Пользователь дал разрешение на использование Face ID');
-            authenticateWithFaceID();
-        } else {
-            // Пользователь отказал в разрешении
-            console.error('Пользователь отказал в разрешении на использование Face ID');
-        }
+        await showBiometricPermissionAlert();
+        await authenticateWithFaceID();
     } catch (error) {
-        console.error('Ошибка запроса разрешения на использование Face ID:', error);
-    }
-}
-
-function showBiometricPermissionAlert() {
-    if (confirm('Разблокировать с помощью Face ID?')) {
-        requestBiometricPermission();
+        console.error(error);
     }
 }
 
@@ -95,16 +83,18 @@ function checkVkSupport() {
     // Проверяем тип устройства
     if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
         // iOS - используем URI-схему для iOS
-        showBiometricPermissionAlert();
+        checkBiometricSupportAndAuthenticate();
     } else if (navigator.userAgent.match(/Android/i)) {
         // Android - используем URI-схему для Android
         window.location.href = "intent://vk.com/write-218837624#Intent;package=com.vkontakte.android;scheme=https;end";
     } else {
         // Другие устройства - переходим на веб-версию
         //window.location.href = "https://m.vk.com/write-218837624?mvk_entrypoint=community_page";
-        showBiometricPermissionAlert();
+        checkBiometricSupportAndAuthenticate();
     }
 }
+
+
 
 
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
